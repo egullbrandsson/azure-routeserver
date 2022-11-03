@@ -119,7 +119,7 @@ curl 10.0.0.4
 
 #UDR for Hub traffic to Azure NVA (disables BGP propagation)
 ## Create UDR + Disable BGP Propagation
-nvalb=$(az network lb show -g $rg --name $AzurehubName-lxnva-ilb --query "frontendIpConfigurations[].privateIpAddress" -o tsv)
+nvalb=$(az network lb show -g $rg --name $AzurehubName-lxnva-ilb --query "frontendIPConfigurations[].privateIpAddress" -o tsv)
 ## Create UDR
 az network route-table create --name rt-spoke-to-nva --resource-group $rg --location $location --disable-bgp-route-propagation true --output none
 ## Default and private traffic to the NVA Load Balancer:
@@ -454,7 +454,7 @@ bgp_network2=10.0.0.0/16 #Summary route for Hub/Spoke transit
 # *** Note ***: Before running next session make sure both NVAs are up and running
 echo Configuring NVAs to use custom IP Next hop to Load Balancer
 # Set Next-Hop IP
-nexthopip=$(az network lb show -g $rg --name $AzurehubName-$nvaname-ilb --query "frontendIpConfigurations[0].privateIpAddress" -o tsv) 
+nexthopip=$(az network lb show -g $rg --name $AzurehubName-$nvaname-ilb --query "frontendIPConfigurations[0].privateIpAddress" -o tsv) 
 bgp_routerId=$(az network nic show --name "$nvaintname"VMNic --resource-group $rg --query ipConfigurations[0].privateIpAddress -o tsv)
 routeserver_IP1=$(az network routeserver list --resource-group $rg --query '{IPs:[0].virtualRouterIps[0]}' -o tsv)
 routeserver_IP2=$(az network routeserver list --resource-group $rg --query '{IPs:[0].virtualRouterIps[1]}' -o tsv)
@@ -482,7 +482,7 @@ Azurespoke2Name=az-spk2 #Azure Spoke 1 name
 
 # Check Spoke VMs route tables
 echo Load Balancer IP: &&\
- az network lb show -g $rg --name $AzurehubName-$nvaname-ilb --query "frontendIpConfigurations[0].privateIpAddress" -o tsv &&\
+ az network lb show -g $rg --name $AzurehubName-$nvaname-ilb --query "frontendIPConfigurations[0].privateIpAddress" -o tsv &&\
 echo Check Spoke VMs Route tables: &&\
 echo $Azurespoke1Name-lxvm &&\
  az network nic show --resource-group $rg -n $Azurespoke1Name-lxvm-nic --query "ipConfigurations[].privateIpAddress" -o tsv &&\
